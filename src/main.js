@@ -16,7 +16,8 @@ require([
         name: "Example",
         template: templateContent,
         events: {
-            "keydown .input input": "onInputKeydown"
+            "keydown .input input": "onInputKeydown",
+            "click .do-clear-completed": "onClearCompleted"
         },
         routes: {
             "filter/:id": "filterList"
@@ -59,6 +60,14 @@ require([
             });
 
             $input.val("");
+        },
+
+        onClearCompleted: function(event) {
+            if (event) event.preventDefault();
+
+            this.todos.collection.each(function(model) {
+                if (model.get("done")) model.destroy();
+            });
         }
     });
 
