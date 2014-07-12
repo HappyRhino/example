@@ -1,4 +1,5 @@
 <div class="todo-inner <% if (model.get("done")) { %>done<% } %>">
     <input type="checkbox" <% if (model.get("done")) { %>checked<% } %> />
+    <a href="#" class="do-remove-todo">&times;</a>
     <input type="text" class="title-input" value="<%- model.get("title") %>" />
 </div>

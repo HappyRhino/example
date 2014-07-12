@@ -13,7 +13,7 @@ require([
 
     // Define base application
     var Application = hr.Application.extend({
-        name: "Example",
+        name: "Todos",
         template: templateContent,
         events: {
             "keydown .input input": "onInputKeydown",
@@ -28,6 +28,10 @@ require([
 
             this.todos = new TodosView({}, this);
             this.listenTo(this.todos.collection, "change add remove reset", function() {
+                // Update title of page with count of non completed
+                this.title(String(this.todos.collection.where({done: false}).length));
+
+                // Update button "clear completed"
                 this.$(".count-completed").text(this.todos.collection.where({done: true}).length);
             });
 
