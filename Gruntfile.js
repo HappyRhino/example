@@ -9,6 +9,7 @@ module.exports = function (grunt) {
     // Load grunt modules
     grunt.loadNpmTasks('grunt-hr-builder');
     grunt.loadNpmTasks('grunt-http-server');
+    grunt.loadNpmTasks('grunt-gh-pages');
 
     // Init GRUNT configuraton
     grunt.initConfig({
@@ -49,7 +50,13 @@ module.exports = function (grunt) {
                 defaultExt: "html",
                 runInBackground: false
             }
-    }
+        },
+        "gh-pages": {
+            options: {
+                base: './build'
+            },
+            src: ['**']
+        }
     });
 
     // Build
@@ -60,6 +67,12 @@ module.exports = function (grunt) {
     // Start server
     grunt.registerTask('start', [
         'http-server:dev'
+    ]);
+
+    // Publish
+    grunt.registerTask('publish', [
+        'build',
+        'gh-pages'
     ]);
 
     grunt.registerTask('default', [

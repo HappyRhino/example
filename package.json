@@ -14,6 +14,7 @@
         "grunt": "~0.4.2",
         "grunt-hr-builder": "1.1.0",
         "happyrhino": "1.0.2",
-        "grunt-http-server": "0.0.5"
+        "grunt-http-server": "0.0.5",
+        "grunt-gh-pages": "0.9.1"
     }
 }
