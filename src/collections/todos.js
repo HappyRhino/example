@@ -13,7 +13,7 @@ define([
         },
 
         loadList: function() {
-            this.reset(hr.Storage.get(STORAGE_KEY, []));
+            this.reset(hr.Storage.get(STORAGE_KEY) || []);
         },
         saveList: function() {
             hr.Storage.set(STORAGE_KEY, this.toJSON());

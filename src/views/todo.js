@@ -6,6 +6,8 @@ define([
         template: templateContent,
         className: "todo",
         events: {
+            "keydown input[type='text']": "onInputKeydown",
+            "keyup input[type='text']": "onInputKeyup",
             "change input[type='checkbox']": "onChangeDone",
             "click .do-remove-todo": "onRemove"
         },
@@ -17,7 +19,17 @@ define([
         onRemove: function(event) {
             if (event) event.preventDefault();
             this.model.destroy();
-        }
+        },
+
+        onInputKeydown: function(event) {
+            if (event.which == 13) return event.preventDefault();
+        },
+
+        onInputKeyup: function(event) {
+            var $input = $(event.currentTarget);
+            this.model.set("title", $input.val(), { silent: true });
+            this.model.collection.saveList();
+        },
     });
 
     return TodoView;
