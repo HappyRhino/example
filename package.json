@@ -1,0 +1,19 @@
+{
+    "name": "hr-example",
+    "description": "Example application using HappyRhino",
+    "version": "0.0.0",
+    "author": "samypesse@gmail.com",
+    "homepage": "https://github.com/HappyRhino/example",
+    "bugs": "https://github.com/HappyRhino/example/issues",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/HappyRhino/example.git"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "grunt": "~0.4.2",
+        "grunt-hr-builder": "1.1.0",
+        "happyrhino": "1.0.2",
+        "grunt-http-server": "0.0.5"
+    }
+}

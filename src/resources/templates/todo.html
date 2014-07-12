@@ -1,0 +1,5 @@
+<div class="todo-inner <% if (model.get("done")) { %>done<% } %>">
+    <input type="checkbox" <% if (model.get("done")) { %>checked<% } %> />
+
+    <span class="title"><%- model.get("title") %></span>
+</div>
