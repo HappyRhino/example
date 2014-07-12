@@ -1,12 +1,18 @@
+<select class="do-select-languages">
+<% _.each(langs, function(lang, langId) { %>
+    <option value="<%- langId %>" <% if (currentLang == langId) { %>selected<% } %>><%- lang.language %></option>
+<% }); %>
+</select>
+
 <div class="container">
     <div class="input">
-        <input type="text" placeholder="What needs to be done?" />
+        <input type="text" placeholder="<%- hr.i18n.t("input") %>" />
     </div>
     <div class="list">
 
     </div>
     <div class="controls">
-        <a href="#" class="do-clear-completed">Clear completed (<span class="count-completed"></span>)</a>
-        <a href="#filter/all">All</a> <a href="#filter/active">Active</a> <a href="#filter/completed">Completed</a>
+        <a href="#" class="do-clear-completed"><%- hr.i18n.t("controls.clear") %> (<span class="count-completed"><%- countCompleted %></span>)</a>
+        <a href="#filter/all"><%- hr.i18n.t("controls.all") %></a> <a href="#filter/active"><%- hr.i18n.t("controls.active") %></a> <a href="#filter/completed"><%- hr.i18n.t("controls.completed") %></a>
     </div>
 </div>

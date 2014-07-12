@@ -1,0 +1,10 @@
+{
+    "language": "English",
+    "input": "What needs to be done?",
+    "controls": {
+        "clear": "Clear completed",
+        "all": "All",
+        "active": "Active",
+        "completed": "Completed"
+    }
+}

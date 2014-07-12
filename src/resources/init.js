@@ -1,6 +1,8 @@
 define([
     "hr/hr",
-    "hr/promise"
+    "hr/promise",
+    "text!resources/langs/en.json",
+    "text!resources/langs/fr.json"
 ], function(hr, Q) {
     hr.Resources.addNamespace("templates", {
         loader: "text"
@@ -13,6 +15,8 @@ define([
     });
 
     return function() {
-        return Q();
+        return hr.I18n.loadLocale([
+            "en", "fr"
+        ]);
     };
 });
