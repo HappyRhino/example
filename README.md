@@ -1,4 +1,6 @@
-example
+Example: Todo Application
 =======
 
-Example application using HappyRhino
+Todo example application build using HappyRhino.
+
+You can see the result at: http://happyrhino.github.io/example/
