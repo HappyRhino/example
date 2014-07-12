@@ -23974,7 +23974,7 @@ Logger, Requests, Urls, Storage, Cache, Cookies, Template, Resources, Offline, B
     
     return hr;
 });
-define('hr/args',[],function() { return {"revision":1405206471790,"baseUrl":"/"}; });
+define('hr/args',[],function() { return {"revision":1405206991532,"baseUrl":"/"}; });
 /**
  * @license RequireJS text 1.0.0 Copyright (c) 2010-2011, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
@@ -24306,7 +24306,7 @@ define('collections/todos',[
         },
 
         loadList: function() {
-            this.reset(hr.Storage.get(STORAGE_KEY, []));
+            this.reset(hr.Storage.get(STORAGE_KEY) || []);
         },
         saveList: function() {
             hr.Storage.set(STORAGE_KEY, this.toJSON());
@@ -24325,6 +24325,8 @@ define('views/todo',[
         template: templateContent,
         className: "todo",
         events: {
+            "keydown input[type='text']": "onInputKeydown",
+            "keyup input[type='text']": "onInputKeyup",
             "change input[type='checkbox']": "onChangeDone",
             "click .do-remove-todo": "onRemove"
         },
@@ -24336,7 +24338,17 @@ define('views/todo',[
         onRemove: function(event) {
             if (event) event.preventDefault();
             this.model.destroy();
-        }
+        },
+
+        onInputKeydown: function(event) {
+            if (event.which == 13) return event.preventDefault();
+        },
+
+        onInputKeyup: function(event) {
+            var $input = $(event.currentTarget);
+            this.model.set("title", $input.val(), { silent: true });
+            this.model.collection.saveList();
+        },
     });
 
     return TodoView;
