@@ -4,7 +4,8 @@ define([
     var Todo = hr.Model.extend({
         defaults: {
             title: "",
-            done: false
+            done: false,
+            date: 0
         }
     });
 

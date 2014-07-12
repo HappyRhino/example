@@ -19,23 +19,32 @@ require([
             "keydown .input input": "onInputKeydown"
         },
         routes: {
-            "page/:id": "showPage"
+            "filter/:id": "filterList"
         },
 
         initialize: function() {
             Application.__super__.initialize.apply(this, arguments);
 
             this.todos = new TodosView({}, this);
+            this.listenTo(this.todos.collection, "change add remove reset", function() {
+                this.$(".count-completed").text(this.todos.collection.where({done: true}).length);
+            });
+
             this.todos.collection.loadList();
         },
 
         finish: function() {
             this.todos.appendTo(this.$(".list"));
+            this.$(".count-completed").text(this.todos.collection.where({done: true}).length);
             return Application.__super__.finish.apply(this, arguments);
         },
 
-        showPage: function(id) {
-
+        filterList: function(id) {
+            this.todos.filter(function(model) {
+                if (id == "all") return true;
+                if (id == "completed") return model.get("done");
+                return !model.get("done");
+            });
         },
 
         onInputKeydown: function(event) {
@@ -44,8 +53,9 @@ require([
             event.preventDefault();
 
             var q = $input.val();
-            this.todos.collection.add({
-                title: q
+            this.todos.collection.unshift({
+                title: q,
+                date: Date.now()
             });
 
             $input.val("");
@@ -53,5 +63,5 @@ require([
     });
 
     var app = new Application();
-    resources().then(app.run.bind(app));
+    resources().then(app.run.bind(app)).then(app.router.start.bind(app.router));
 });

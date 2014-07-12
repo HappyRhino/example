@@ -2,12 +2,25 @@
     list-style: none;
 
     .todo {
+        padding: 5px 0px;
+        border-bottom: 1px solid #f5f5f5;
+
+        &.hr-list-fiter-on {
+            display: none;
+        }
+
         .todo-inner {
             &.done {
-                .title {
+                .title-input {
                     text-decoration:line-through;
                 }
             }
+        }
+
+        .title-input {
+            display: inline-block;
+            border: none;
+            outline: none;
         }
     }
 }
