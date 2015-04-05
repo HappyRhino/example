@@ -2,19 +2,37 @@
     "name": "hr-example",
     "description": "Example application using HappyRhino",
     "version": "0.0.0",
-    "author": "samypesse@gmail.com",
+    "author": "Samy Pesse <samypesse@gmail.com>",
     "homepage": "https://github.com/HappyRhino/example",
     "bugs": "https://github.com/HappyRhino/example/issues",
     "repository": {
         "type": "git",
         "url": "https://github.com/HappyRhino/example.git"
     },
-    "dependencies": {},
+    "dependencies": {
+        "q": "~1.2.0",
+        "jquery": "~2.1.3",
+        "hr.utils": "*",
+        "hr.app": "*",
+        "hr.list": "*",
+        "hr.storage": "*",
+        "hr.model": "*",
+        "hr.view": "*",
+        "hr.collection": "*",
+        "hr.class": ">=0.3.0"
+    },
     "devDependencies": {
-        "grunt": "~0.4.2",
-        "grunt-hr-builder": "1.1.0",
-        "happyrhino": "1.0.2",
-        "grunt-http-server": "0.0.5",
-        "grunt-gh-pages": "0.9.1"
+        "gulp": "^3.8.11",
+        "gulp-browserify": "^0.5.1",
+        "gulp-rename": "^1.2.2",
+        "gulp-uglify": "1.1.0",
+        "gulp-less": "3.0.2",
+        "gulp-run-sequence": "0.3.2",
+        "hr.mocha": "0.2.0",
+        "del": "1.1.1",
+        "stringify": "3.1.0"
+    },
+    "scripts": {
+        "test": "./node_modules/.bin/hr-mocha ./tests/index.js"
     }
 }

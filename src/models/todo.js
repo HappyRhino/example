@@ -1,13 +1,11 @@
-define([
-    "hr/hr"
-], function(hr) {
-    var Todo = hr.Model.extend({
-        defaults: {
-            title: "",
-            done: false,
-            date: 0
-        }
-    });
+var Model = require("hr.model");
 
-    return Todo;
+var Todo = Model.extend({
+    defaults: {
+        title: "",
+        done: false,
+        date: 0
+    }
 });
+
+module.exports = Todo;

@@ -1,102 +1,86 @@
-require([
-    "hr/utils",
-    "hr/dom",
-    "hr/promise",
-    "hr/hr",
-    "hr/args",
-    "resources/init",
-    "views/todos",
-    "text!resources/templates/main.html",
-], function(_, $, Q, hr, args, resources, TodosView, templateContent) {
-    // Configure hr
-    hr.configure(args);
+var $ = require("jquery");
+var Q = require("q");
+var _ = require("hr.utils");
+var Application = require("hr.app");
+var View = require("hr.view");
 
-    // Define base application
-    var Application = hr.Application.extend({
-        name: "Todos",
-        template: templateContent,
-        events: {
-            "keydown .input input": "onInputKeydown",
-            "click .do-clear-completed": "onClearCompleted",
-            "change .do-select-languages": "onLangChange"
-        },
-        routes: {
-            "filter/:id": "filterList"
-        },
+var TodosView = require("./views/todos");
+var templateContent = require("./resources/templates/main.html");
 
-        initialize: function() {
-            Application.__super__.initialize.apply(this, arguments);
+var TodoApplication = Application
+.inherit(View.Template)
+.extend({
+    name: "Todos",
+    template: templateContent,
+    events: {
+        "keydown .input input": "onInputKeydown",
+        "click .do-clear-completed": "onClearCompleted",
+        "change .do-select-languages": "onLangChange"
+    },
+    routes: {
+        "filter/:id": "filterList"
+    },
 
-            hr.I18n.setCurrentLocale(hr.Storage.get("lang"));
+    initialize: function() {
+        TodoApplication.__super__.initialize.apply(this, arguments);
 
-            this.todos = new TodosView({}, this);
-            this.listenTo(this.todos.collection, "change add remove reset", function() {
-                // Update title of page with count of non completed
-                this.title(String(this.todos.collection.where({done: false}).length));
+        this.todos = new TodosView({}, this);
+        this.listenTo(this.todos.collection, "change add remove reset", this.onCountChanged);
 
-                // Update button "clear completed"
-                this.$(".count-completed").text(this.todos.collection.where({done: true}).length);
-            });
+        this.todos.collection.loadFromStorage();
+    },
 
-            this.todos.collection.loadList();
-        },
+    render: function() {
+        this.todos.detach();
+        return TodoApplication.__super__.render.apply(this, arguments);
+    },
 
-        templateContext: function() {
-            return {
-                currentLang: hr.I18n.currentLocale(),
-                langs: hr.I18n.translations,
-                countCompleted: this.todos.collection.where({done: true}).length
-            };
-        },
+    finish: function() {
+        this.todos.appendTo(this.$(".list"));
+        this.onCountChanged();
+        return TodoApplication.__super__.finish.apply(this, arguments);
+    },
 
-        render: function() {
-            this.todos.detach();
-            return Application.__super__.render.apply(this, arguments);
-        },
+    filterList: function(id) {
+        this.todos.filter(function(model) {
+            if (id == "all") return true;
+            if (id == "completed") return model.get("done");
+            return !model.get("done");
+        });
+    },
 
-        finish: function() {
-            this.todos.appendTo(this.$(".list"));
-            return Application.__super__.finish.apply(this, arguments);
-        },
+    onInputKeydown: function(event) {
+        var $input = $(event.currentTarget);
+        if (event.which != 13) return;
+        event.preventDefault();
 
-        filterList: function(id) {
-            this.todos.filter(function(model) {
-                if (id == "all") return true;
-                if (id == "completed") return model.get("done");
-                return !model.get("done");
-            });
-        },
+        this.todos.collection.unshift({
+            title: $input.val(),
+            date: Date.now()
+        });
 
-        onInputKeydown: function(event) {
-            var $input = $(event.currentTarget);
-            if (event.which != 13) return;
-            event.preventDefault();
+        $input.val("");
+    },
 
-            var q = $input.val();
-            this.todos.collection.unshift({
-                title: q,
-                date: Date.now()
-            });
+    onClearCompleted: function(event) {
+        if (event) event.preventDefault();
 
-            $input.val("");
-        },
+        this.todos.collection.filter(function(model) {
+            return model.get("done");
+        }).forEach(function(model) {
+            model.destroy();
+        });
+    },
 
-        onClearCompleted: function(event) {
-            if (event) event.preventDefault();
+    onCountChanged: function() {
+        // Update title of page with count of non completed
+        this.head.title(String(this.todos.collection.where({done: false}).length));
 
-            this.todos.collection.each(function(model) {
-                if (model.get("done")) model.destroy();
-            });
-        },
-
-        onLangChange: function() {
-            if (event) event.preventDefault();
-            hr.I18n.setCurrentLocale($(event.target).val());
-            hr.Storage.set("lang", hr.I18n.currentLocale());
-            this.update();
-        }
-    });
-
-    var app = new Application();
-    resources().then(app.run.bind(app)).then(app.router.start.bind(app.router));
+        // Update button "clear completed"
+        this.$(".count-completed").text(this.todos.collection.where({done: true}).length);
+    }
 });
+
+var app = new TodoApplication();
+app.router.start();
+app.update();

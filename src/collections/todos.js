@@ -1,24 +1,27 @@
-define([
-    "hr/hr",
-    "models/todo"
-], function(hr, Todo) {
-    var STORAGE_KEY = "todos";
-    var Todos = hr.Collection.extend({
-        model: Todo,
+var Collection = require("hr.collection");
+var storage = require("hr.storage");
 
-        initialize: function() {
-            Todos.__super__.initialize.apply(this, arguments);
+var Todo = require("../models/todo");
 
-            this.listenTo(this, "change add remove", this.saveList);
-        },
+// Key to store todos in localstorage
+var STORAGE_KEY = "todos";
 
-        loadList: function() {
-            this.reset(hr.Storage.get(STORAGE_KEY) || []);
-        },
-        saveList: function() {
-            hr.Storage.set(STORAGE_KEY, this.toJSON());
-        }
-    });
+var Todos = Collection.extend({
+    model: Todo,
 
-    return Todos;
+    initialize: function() {
+        Todos.__super__.initialize.apply(this, arguments);
+
+        // Save collection when change
+        this.listenTo(this, "change add remove", this.saveInStorage);
+    },
+
+    loadFromStorage: function() {
+        this.reset(storage.get(STORAGE_KEY) || []);
+    },
+    saveInStorage: function() {
+        storage.set(STORAGE_KEY, this.toJSON());
+    }
 });
+
+module.exports = Todos;

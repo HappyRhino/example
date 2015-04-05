@@ -1,13 +1,12 @@
-define([
-    "hr/hr",
-    "collections/todos",
-    "views/todo"
-], function(hr, Todos, TodoView) {
-    var TodosView = hr.List.extend({
-        Collection: Todos,
-        Item: TodoView,
-        className: "todos"
-    });
+var ListView = require("hr.list");
 
-    return TodosView;
+var Todos = require("../collections/todos");
+var TodoItem = require("./todo");
+
+var TodosView = ListView.extend({
+    Collection: Todos,
+    Item: TodoItem,
+    className: "todos"
 });
+
+module.exports = TodosView;
